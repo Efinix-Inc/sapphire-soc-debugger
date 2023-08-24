@@ -1,16 +1,16 @@
 #!/bin/bash
-
+script_path='/zephyr/openocd_cfg'
 OPENOCD_BIN=openocd
 
 unset BOARD
 unset DEBUG
 unset CPU_COUNT
 unset SOFT_TAP
-
+unset ZEPHYR_DEBUG 
 CPU_COUNT=1
 DEBUG=1
 SOFT_TAP=0
-
+ZEPHYR_DEBUG=0
 usage() {
     echo Usage
     echo
@@ -23,13 +23,15 @@ usage() {
     echo "                hard JTAG."
     echo "-d, debug       Show debug message"
     echo
+    echo "-z, Zephyr debug     Show debug message"
+    echo
     echo "Example,"
-    echo "$0 -b ti180 -c 4"
+    echo "$0 -b ti180 -c 4 -z"
 
     exit 1
 }
 
-while getopts ":b:c:dis" options; do
+while getopts ":b:c:disz" options; do
     case "${options}" in
         b)
 	    BOARD=${OPTARG}
@@ -46,8 +48,11 @@ while getopts ":b:c:dis" options; do
 	s)
 	    SOFT_TAP=1
 	    ;;
-        *)
-            usage
+    z) 
+        ZEPHYR_DEBUG=1
+        ;;
+    *)
+        usage
 	    ;;
     esac
 done
@@ -65,13 +70,19 @@ export BOARD=$BOARD
 export DEBUG=$DEBUG
 export SOFT_TAP=$SOFT_TAP
 export CPU_COUNT=$CPU_COUNT
+export ZEPHYR_DEBUG=$ZEPHYR_DEBUG
 
 if [[ $DBG -eq 1 ]]; then
     echo BOARD = $BOARD
     echo DEBUG = $DEBUG
     echo SOFT_TAP = $SOFT_TAP
     echo CPU_COUNT = $CPU_COUNT
+    echo ZEPHYR_DEBUG = $ZEPHYR_DEBUG
     echo
 fi
 
-$OPENOCD_BIN -f soc_debug.cfg
+if [[ $ZEPHYR_DEBUG -eq 1 ]]; then
+    sudo -E -- sh -c "/zephyr/bin/openocd -f $script_path/soc_debug.cfg"
+else
+  $OPENOCD_BIN -f soc_debug.cfg
+fi
