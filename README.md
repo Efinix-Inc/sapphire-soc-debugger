@@ -23,17 +23,22 @@ SoC Debugger is a script and configuration for debugging Efinix RISCV Sapphire S
 ```bash
 Usage
 
--b, board       Board can be t120, ti60 or ti180
--c, cpu count   Number of CPU. Default is 1
--i, interface   Debug interface. Default is 1
-                1 - RISCV Standard Debug Interface
-                0 - Vexriscv Debug Interface
--s, soft tap    Using soft tap instead of hard JTAG. Default is using
-                hard JTAG.
--d, debug       Show debug message
+-b, board         Board can be t120, ti60 or ti180
+-c, cpu count     Number of CPU. Default is 1
+-i, interface     Debug interface. Default is 1
+                  1 - RISCV Standard Debug Interface
+                  0 - Vexriscv Debug Interface
+-s, soft tap      Using soft tap instead of hard JTAG. Default is using
+                  hard JTAG.
+-d, debug         Show debug message
+-z, Zephyr Debug  Enable debug for Zephyr
 
-Example,
-./soc_debug.sh -b ti180 -c 4
+Example (Linux),
+./soc_debug.sh -b ti180 -c 4 
+
+Example (Zephyr),
+./soc_debug.sh -b ti180 -c 4 -z
+
 ```
 
 Example
