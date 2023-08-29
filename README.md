@@ -31,7 +31,8 @@ Usage
 -s, soft tap      Using soft tap instead of hard JTAG. Default is using
                   hard JTAG.
 -d, debug         Show debug message
--z, Zephyr Debug  Enable debug for Zephyr
+-z, Zephyr Debug  Enable debug for Zephyr 
+-l  Linux Debug   Enable debug for Linux 
 -t, Tap port      FPGA tap port number. Default is 1. Range is 1 to 4. 
 Example (Linux),
 ./soc_debug.sh -b ti180 -c 4 
@@ -40,6 +41,8 @@ Example (Zephyr),
 ./soc_debug.sh -b ti180 -c 4 -z
 
 ```
+
+> **Note:** Zephyr debug, -z and Linux debug, -l are mutually exclusive. Select either one based on your application. 
 
 Example
 

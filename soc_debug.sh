@@ -7,6 +7,7 @@ unset DEBUG
 unset CPU_COUNT
 unset SOFT_TAP
 unset ZEPHYR_DEBUG 
+unset LINUX_DEBUG
 unset TAP_PORT
 
 CPU_COUNT=1
@@ -14,6 +15,7 @@ DEBUG=1
 SOFT_TAP=0
 ZEPHYR_DEBUG=0
 TAP_PORT=1 
+LINUX_DEBUG=0
 
 usage() {
     echo Usage
@@ -29,6 +31,8 @@ usage() {
     echo
     echo "-z, Zephyr debug     Enable debug for Zephyr"
     echo
+    echo "-l, Linux debug     Enable debug for Linux"
+    echo
     echo "-t, tap port         FPGA tap port setting. Default = 1. Ranges = 1 to 4 "
     echo
     echo "Example,"
@@ -37,7 +41,7 @@ usage() {
     exit 1
 }
 
-while getopts ":b:c:t:disz" options; do
+while getopts ":b:c:t:dilsz" options; do
     case "${options}" in
         b)
 	    BOARD=${OPTARG}
@@ -51,6 +55,9 @@ while getopts ":b:c:t:disz" options; do
         i)
 	    DEBUG=0
 	    ;;
+    l) 
+        LINUX_DEBUG=1
+        ;;
 	s)
 	    SOFT_TAP=1
 	    ;;
@@ -75,11 +82,20 @@ if [[ -z $BOARD ]]; then
     exit 1
 fi
 
+if [[ $LINUX_DEBUG -eq 1 && $ZEPHYR_DEBUG -eq 1 ]]; then
+    echo Error: Both linux and zephyr debug selected. Select either linux debug, -l or zephyr debug, -z. 
+    exit 1
+fi 
+
+if [[ $LINUX_DEBUG -eq 0 && $ZEPHYR_DEBUG -eq 0 ]]; then
+    echo Error: Both linux and zephyr debug are not selected. Select either linux debug, -l or zephyr debug, -z. 
+    exit 1
+fi 
+
 export BOARD=$BOARD
 export DEBUG=$DEBUG
 export SOFT_TAP=$SOFT_TAP
 export CPU_COUNT=$CPU_COUNT
-export ZEPHYR_DEBUG=$ZEPHYR_DEBUG
 export TAP_PORT=$TAP_PORT
 
 if [[ $DBG -eq 1 ]]; then
