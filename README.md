@@ -32,7 +32,7 @@ Usage
                   hard JTAG.
 -d, debug         Show debug message
 -z, Zephyr Debug  Enable debug for Zephyr
-
+-t, Tap port      FPGA tap port number. Default is 1. Range is 1 to 4. 
 Example (Linux),
 ./soc_debug.sh -b ti180 -c 4 
 
